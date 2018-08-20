@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+  mavenCentral()
+}
+
+sourceSets {
+  main {
+	java {
+	  srcDirs 'src/'
+	}
+	resources {
+	  srcDirs 'src/'
+	}
+  }
+}
+
+eclipse {
+  classpath {
+	downloadSources = true
+	downloadJavadoc = true
+  }
+}
+
+
+dependencies {
+	compile group: "org.ow2.asm", name: "asm-all", version: "5.2"
+}
+
+jar {
+	manifest {
+		attributes "Premain-Class": "edu.washington.cse.instrumentation.dacapo.PreMainBroken"
+	}
+}
+
+shadowJar {
+	relocate "org.objectweb", "asm5.org.objectweb"
+}
